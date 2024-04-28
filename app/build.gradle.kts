@@ -1,6 +1,10 @@
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
+	id("androidx.navigation.safeargs.kotlin")
+	id("com.google.gms.google-services")
+	id("kotlin-kapt")
+	id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -18,6 +22,12 @@ android {
 		vectorDrawables {
 			useSupportLibrary = true
 		}
+
+		buildConfigField(
+			"String",
+			"BASE_URL",
+			"\"https://this-is-me-e137c-default-rtdb.firebaseio.com/\""
+		)
 	}
 
 	buildTypes {
@@ -47,23 +57,115 @@ android {
 			excludes += "/META-INF/{AL2.0,LGPL2.1}"
 		}
 	}
+
+	buildFeatures {
+		buildConfig = true
+	}
+
+	kapt {
+		correctErrorTypes = true
+	}
 }
 
 dependencies {
-
-	implementation("androidx.core:core-ktx:1.9.0")
+	implementation("androidx.core:core-ktx:1.13.0")
 	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-	implementation("androidx.activity:activity-compose:1.8.2")
-	implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+	implementation("androidx.activity:activity-compose:1.9.0")
+	implementation(platform("androidx.compose:compose-bom:2024.04.01"))
 	implementation("androidx.compose.ui:ui")
 	implementation("androidx.compose.ui:ui-graphics")
 	implementation("androidx.compose.ui:ui-tooling-preview")
 	implementation("androidx.compose.material3:material3")
+	implementation("androidx.compose.ui:ui-text-google-fonts:1.6.6")
+	implementation("com.google.android.gms:play-services-instantapps:18.0.1")
+	implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+	implementation("androidx.camera:camera-lifecycle:1.3.3")
+	implementation("com.google.android.gms:play-services-maps:18.2.0")
 	testImplementation("junit:junit:4.13.2")
 	androidTestImplementation("androidx.test.ext:junit:1.1.5")
 	androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-	androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+	androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
 	androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 	debugImplementation("androidx.compose.ui:ui-tooling")
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
+	implementation("androidx.compose.material:material:1.6.6")
+
+//------------------------------------------------------------------------------------------------------------//
+
+	//Navigation with Compose
+	val navVersion = "2.7.7"
+	implementation("androidx.navigation:navigation-compose:$navVersion")
+
+//------------------------------------------------------------------------------------------------------------//
+
+	implementation("io.coil-kt:coil-compose:2.6.0")
+
+//------------------------------------------------------------------------------------------------------------//
+
+	//Retrofit
+	implementation("com.squareup.retrofit2:retrofit:2.9.0")
+	//Gson
+	implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+	//OkHttp interceptor
+	implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+	//------------------------------------------------------------------------------------------------------------//
+
+	val lifecycleVersion = "2.7.0"
+	val roomVersion = "2.6.1"
+
+	// ViewModel
+	implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+	// LiveData
+	implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+	// Saved state module for ViewModel
+	implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
+	// Annotation processor
+	implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+
+//------------------------------------------------------------------------------------------------------------//
+
+	//Room
+	implementation("androidx.room:room-runtime:$roomVersion")
+	// To use Kotlin Symbol Processing (KSP)
+	//noinspection KaptUsageInsteadOfKsp
+	kapt("androidx.room:room-compiler:$roomVersion")
+	// optional - Kotlin Extensions and Coroutines support for Room
+	implementation("androidx.room:room-ktx:$roomVersion")
+
+//------------------------------------------------------------------------------------------------------------//
+
+	//Coroutine Core
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
+	//Coroutine Android
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0-RC2")
+
+//------------------------------------------------------------------------------------------------------------//
+
+	//Firebase
+	implementation("com.google.firebase:firebase-database:20.3.1")
+	implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+	implementation("com.google.firebase:firebase-analytics")
+
+	//------------------------------------------------------------------------------------------------------------//
+
+	//Google Authentication
+	// Add the dependency for the Firebase Authentication library
+	// When using the BoM, you don't specify versions in Firebase library dependencies
+	implementation("com.google.firebase:firebase-auth")
+
+	// Also add the dependency for the Google Play services library and specify its version
+	implementation("com.google.android.gms:play-services-auth:21.1.0")
+
+	//------------------------------------------------------------------------------------------------------------//
+
+	//Dagger Hilt
+	implementation("com.google.dagger:hilt-android:2.46")
+	kapt("com.google.dagger:hilt-android-compiler:2.46")
+	implementation("androidx.hilt:hilt-work:1.2.0")
+	kapt("androidx.hilt:hilt-compiler:1.2.0")
+	implementation("androidx.work:work-runtime-ktx:2.9.0")
+	implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+	//------------------------------------------------------------------------------------------------------------//
 }
